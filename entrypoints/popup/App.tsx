@@ -48,6 +48,8 @@ const ForceGraph: React.FC<{ nodesData: MyNode[] }> = ({ nodesData }) => {
       setNodes([...simulation.nodes()]);
       setIsLoading(false);
     });
+
+    drag(simulation);
     return () => {
       simulation.stop();
     };
@@ -125,6 +127,7 @@ export default function App() {
     </div>
   );
 }
+
 
 function drag(simulation:any) {
   
