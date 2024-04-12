@@ -5,12 +5,14 @@ import * as rawData from "./graph.json";
 export default class Graph extends Component<GraphProps> {
 
     componentDidMount() {
+        d3.selectAll('#App svg').remove();
         this.drawChart();
+        
     }
 
     drawChart() {
-        const width = 928;
-        const height = 680;
+        const width = 650;
+        const height = 650;
         const json = JSON.stringify(rawData);
         let data = JSON.parse(json);
         // Specify the color scale.
