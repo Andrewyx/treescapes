@@ -1,13 +1,12 @@
 import { Component } from "react";
 import * as d3 from "d3";
-import * as rawData from "./graph.json";
+import * as rawData from "./data.json";
 
 export default class Graph extends Component<GraphProps> {
 
     componentDidMount() {
         d3.selectAll('#App svg').remove();
         this.drawChart();
-        
     }
 
     drawChart() {
@@ -22,7 +21,7 @@ export default class Graph extends Component<GraphProps> {
         // so that re-evaluating this cell produces the same result.
         const links = data.links.map((d:any) => ({...d}));
         const nodes = data.nodes.map((d:any) => ({...d}));
-    
+
         // Create a simulation with several forces.
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id((d:any) => d.id))
@@ -50,14 +49,18 @@ export default class Graph extends Component<GraphProps> {
         const node = svg.append("g")
             .attr("stroke", "#fff")
             .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-            .attr("r", 5)
+            .selectAll("g")
+            .data(nodes)
+            .join("g")
+
+        node.append("circle")
+            .attr("r", 10)
             .attr("fill", (d:any) => color(d.group));
-    
-        node.append("title")
-            .text((d:any) => d.id);
+        node.append('text')
+            .text((d:any) => d.id)
+            .attr("fill", "gray")
+            .attr("stroke", "none")
+            .attr("font-size", "200%");
     
         // Add a drag behavior.
         node.call(d3.drag<any, any>()
@@ -65,6 +68,8 @@ export default class Graph extends Component<GraphProps> {
             .on("drag", dragged)
             .on("end", dragended));
         
+        // const label = svg.append("g")
+        //     .text("title");
         // Set the position attributes of this.links and nodes each time the simulation ticks.
         simulation.on("tick", () => {
         link
@@ -74,8 +79,7 @@ export default class Graph extends Component<GraphProps> {
             .attr("y2", (d:any) => d.target.y);
     
         node
-            .attr("cx", (d:any) => d.x)
-            .attr("cy", (d:any) => d.y);
+            .attr('transform', (d:any) => `translate(${d.x},${d.y})`);
         });
     
         // Reheat the simulation when drag starts, and fix the subject position.
