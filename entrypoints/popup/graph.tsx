@@ -49,9 +49,9 @@ export default class Graph extends Component<GraphProps> {
         const node = svg.append("g")
             .attr("stroke", "#fff")
             .attr("stroke-width", 1.5)
-            .selectAll("g")
+        .selectAll("svg g")
             .data(nodes)
-            .join("g")
+            .join("g");
 
         node.append("circle")
             .attr("r", 10)
@@ -68,8 +68,9 @@ export default class Graph extends Component<GraphProps> {
             .on("drag", dragged)
             .on("end", dragended));
         
-        // const label = svg.append("g")
-        //     .text("title");
+        svg.call(d3.zoom<any, any>()
+            .on('zoom', handleZoom));
+        
         // Set the position attributes of this.links and nodes each time the simulation ticks.
         simulation.on("tick", () => {
         link
@@ -101,6 +102,10 @@ export default class Graph extends Component<GraphProps> {
         if (!event.active) simulation.alphaTarget(0);
         event.subject.fx = null;
         event.subject.fy = null;
+        }
+        function handleZoom(event:any) {
+            d3.selectAll('svg g')
+                .attr('transform', event.transform);
         }
     }
     render() {
