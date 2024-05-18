@@ -1,6 +1,6 @@
 import { Component } from "react";
 import * as d3 from "d3";
-import * as rawData from "./graph.json";
+import * as rawData from "./data.json";
 
 export default class Graph extends Component<GraphProps> {
 
@@ -21,7 +21,7 @@ export default class Graph extends Component<GraphProps> {
         // so that re-evaluating this cell produces the same result.
         const links = data.links.map((d:any) => ({...d}));
         const nodes = data.nodes.map((d:any) => ({...d}));
-    
+
         // Create a simulation with several forces.
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id((d:any) => d.id))
@@ -67,6 +67,9 @@ export default class Graph extends Component<GraphProps> {
             .on("drag", dragged)
             .on("end", dragended));
         
+        svg.call(d3.zoom<any, any>()
+            .on('zoom', handleZoom));
+        
         // Set the position attributes of this.links and nodes each time the simulation ticks.
         simulation.on("tick", () => {
         link
@@ -76,8 +79,7 @@ export default class Graph extends Component<GraphProps> {
             .attr("y2", (d:any) => d.target.y);
     
         node
-            .attr("cx", (d:any) => d.x)
-            .attr("cy", (d:any) => d.y);
+            .attr('transform', (d:any) => `translate(${d.x},${d.y})`);
         });
     
         // Reheat the simulation when drag starts, and fix the subject position.
@@ -99,6 +101,10 @@ export default class Graph extends Component<GraphProps> {
         if (!event.active) simulation.alphaTarget(0);
         event.subject.fx = null;
         event.subject.fy = null;
+        }
+        function handleZoom(event:any) {
+            d3.selectAll('svg g')
+                .attr('transform', event.transform);
         }
     }
     render() {

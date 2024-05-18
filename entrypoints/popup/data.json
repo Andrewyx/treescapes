@@ -1,0 +1,21 @@
+{
+    "nodes": [
+        {
+            "id": "Structural basis of PROTAC cooperative recognition for selective protein degradation.",
+            "group": "Cited Works",
+            "radius": 2,
+            "citing_patents_count": 2
+        },
+        {
+            "id": "109-294-662-661-65X",
+            "group": "Citing Patents"
+        }
+    ],
+    "links": [
+        {
+            "source": "Structural basis of PROTAC cooperative recognition for selective protein degradation.",
+            "target": "109-294-662-661-65X",
+            "value": 2
+        }
+    ]
+}
