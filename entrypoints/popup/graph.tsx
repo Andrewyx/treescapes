@@ -7,7 +7,6 @@ export default class Graph extends Component<GraphProps> {
     componentDidMount() {
         d3.selectAll('#App svg').remove();
         this.drawChart();
-        
     }
 
     drawChart() {
@@ -54,11 +53,14 @@ export default class Graph extends Component<GraphProps> {
         .data(nodes)
         .join("circle")
             .attr("r", 5)
-            .attr("fill", (d:any) => color(d.group));
+            .attr("fill", (d:any) => color(d.group))
+            // .append("title")
+                .text((d:any) => d.id);
     
-        node.append("title")
-            .text((d:any) => d.id);
-    
+        node.append("text")
+            .attr("dx", 600)
+            .text((d:any) => "SOME TEXT");
+
         // Add a drag behavior.
         node.call(d3.drag<any, any>()
             .on("start", dragstarted)
